@@ -1,0 +1,60 @@
+-----Encontrar todos los proveedores que venden todas las piezas suministradas por S1.
+
+select codpro from proveedor
+where not exists
+(select distinct codpie from ventas where ventas.codpro='S1'
+minus
+select codpie from ventas where ventas.codpro=proveedor.codpro);
+
+
+
+ ----Encontrar la cantidad total de piezas que ha vendido cada proveedor que cumple la condición
+de vender todas las piezas suministradas por S1.
+
+select v.codpro,sum(v.cantidad) from ventas v
+where not exists
+(select distinct(codpie) from ventas where ventas.codpro='S1'
+minus
+select codpie from ventas where v.codpro=ventas.codpro)
+group by(v.codpro);
+
+
+----Encontrar que proyectos estan suministrados por todos lo proveedores que suministran la
+pieza P3.
+
+select codpj from proyecto
+where not exists
+(select distinct codpro from ventas where ventas.codpie='P3'
+minus
+select codpro from ventas where proyecto.codpj=ventas.codpj);
+
+----Encontrar la cantidad media de piezas suministrada a aquellos proveedores que venden la
+pieza P3.
+
+select codpro,avg(cantidad) from ventas
+where ventas.codpie='P3'
+group by(codpro);
+
+
+
+----Queremos saber los nombres de tus índices y sobre quØ tablas estÆn montados, indica ademÆs
+su propietario.
+
+
+select index_name,table_name,table_owner from user_indexes;
+
+---Implementar el comando DESCRIBE para tu tabla ventas a travØs de una consulta a las vistas
+del catÆlogo.
+
+ select colum_name,data_type,nullable user_tab_columns where table_name=ventas;
+
+----Mostrar para cada proveedor la media de productos suministrados cada aæo.
+
+select codpro,avg(cantidad),to_char(fecha,'YYYY') from ventas
+group by(to_char(fecha,'YYYY'),codpro);
+
+----Encontrar el nombre de aquellos proveedores que venden mÆs de una pieza roja.
+
+select nompro from proveedor,ventas,pieza
+where proveedor.codpro=ventas.codpro and ventas.codpie=pieza.codpie and pieza.color='Rojo'
+group by(proveedor.nompro) having count(*)>1;

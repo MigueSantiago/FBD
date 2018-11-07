@@ -1,0 +1,9 @@
+
+3.40 Muestra las tablas ventas a las que tienes acceso de consulta junto con el nombre del pro-
+pietario y su nœmero de identicación en el sistema
+
+select user_id,owner from all_users,all_tables
+where (table_name like '%VENTAS%' and all_tables.owner=all_users.username);
+
+
+

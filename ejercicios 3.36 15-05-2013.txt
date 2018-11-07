@@ -1,0 +1,30 @@
+Mostrar codpro que la suma de la cantidad de sus ventas es la mayor.
+
+select codpro,sum(cantidad)
+from ventas
+group by codpro
+having sum(cantidad)>= all
+(select sum(v1.cantidad)
+from ventas v1
+group by v1.codpro);
+
+
+3.36 Mostrar para cada pieza la maxima cantidad vendida.
+
+
+select codpie,max(cantidad)
+from ventas
+group by codpie;
+
+- Mostrar aquella pieza que tiene la maxima cantidad vendida.
+
+select codpie,max(cantidad)
+from ventas
+group by codpie
+having max(cantidad)>= all
+(select max(v1.cantidad)
+from ventas v1
+group by v1.codpie);
+
+select codpie,cantidad from ventas
+where cantidad>=all(select v.cantidad from ventas v);

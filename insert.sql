@@ -1,0 +1,1 @@
+INSERT INTO plantilla VALUES ('12345678','Pepe','soltero',SYSDATE,SYSDATE);

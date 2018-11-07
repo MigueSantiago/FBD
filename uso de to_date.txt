@@ -1,0 +1,50 @@
+TO_DATE
+
+Ejercicio 3.37 Comprueba que no funciona correctamente si las comparaciones de fechas se hacen con
+cadenas.
+
+select * from ventas where fecha between to_date('01/01/2002','DD/MM/YYYY')and 
+to_date('31/12/2004','DD/MM/YYYY');
+
+COD COD COD  CANTIDAD FECHA
+--- --- --- --------- --------
+S2  P2  J2         15 23/11/04
+S2  P5  J2        300 23/11/04
+S2  P2  J1       4500 15/08/04
+S3  P1  J1         90 09/06/04
+S3  P2  J1        190 12/04/02
+S4  P5  J1         15 12/04/02
+S4  P3  J1        100 12/04/02
+S4  P1  J3       1500 26/01/03
+
+
+select * from ventas where fecha between ('01/01/2002')and 
+('31/12/2004');
+
+COD COD COD  CANTIDAD FECHA
+--- --- --- --------- --------
+S2  P2  J2         15 23/11/04
+S2  P5  J2        300 23/11/04
+S2  P2  J1       4500 15/08/04
+S3  P1  J1         90 09/06/04
+S3  P2  J1        190 12/04/02
+S4  P5  J1         15 12/04/02
+S4  P3  J1        100 12/04/02
+S4  P1  J3       1500 26/01/03
+
+
+/- Seleccionar cantidades vendidas en todos los años ordenados por año.
+
+select to_char(fecha,'YYYY'),sum(cantidad)
+from ventas 
+group by to_char(fecha,'YYYY') order by to_char(fecha,'YYYY');
+
+
+/- Mostrar media de cantidades mostrando el año en digito y el nombre del mes.
+
+select to_char(fecha, 'YYYY month'),avg(cantidad)
+from ventas
+group by to_char(fecha,'YYYY month')order by to_char(fecha,'YYYY month');
+
+
+

@@ -1,0 +1,5 @@
+CREATE TABLE CONDUCTOR(
+DNI char(8) constraint dni_no_nulo not null constraint dni_clave_primaria primary key,
+NOMBRE varchar2(20) constraint nombre_no_nulo not null,
+DIRECCION varchar2 (30) constraint direccion_no_nula not null,
+PROVINCIA varchar(15) constraint provincia_no_nula not null);

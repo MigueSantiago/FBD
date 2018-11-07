@@ -1,0 +1,189 @@
+select MAX(cantidad),MIN(cantidad),SUM(cantidad),
+AVG(cantidad),COUNT(cantidad),STD DEV(cantidad),
+from ventas;
+
+
+Manera de usarlo:
+
+select codpro from ventas
+where cantidad=(select MAX(cantidad) from ventas v);
+
+COD
+---
+S2
+
+-----------
+
+Error:
+
+select codpro MAX(cantidad) from ventas;
+
+-----------------------------------------------------------------
+
+
+COUNT se aplica sobre un campo y contabiliza el numero de tuplas.
+
+select count(*) from pieza where peso > 100;
+
+ COUNT(*)
+---------
+        0
+
+select count(codpie) from pieza where peso > 100;
+
+COUNT(CODPIE)
+-------------
+            0
+
+
+------------------------------------------------------------------
+
+GROUP BY: Generar grupos para aplica sobre ellos una seleccion.
+
+select codpro,codpie,count(*),max(cantidad)
+from ventas 
+group by (codpro,codpie);
+
+COD  COUNT(*) MAX(CANTIDAD)
+--- --------- -------------
+S1          9           800
+S2          3          4500
+S3          3           190
+S4          4          1700
+S5          3           400
+
+
+
+
+select codpro,codpie,count(*),max(cantidad)
+from ventas 
+group by (codpro,codpie);
+
+
+COD COD  COUNT(*) MAX(CANTIDAD)
+--- --- --------- -------------
+S1  P1          3           500
+S1  P2          2           200
+S1  P3          1           800
+S1  P4          3           290
+S2  P2          2          4500
+S2  P5          1           300
+S3  P1          1            90
+S3  P2          1           190
+S3  P5          1            20
+S4  P1          1          1500
+S4  P2          1          1700
+S4  P3          1           100
+S4  P5          1            15
+S5  P1          1           400
+S5  P3          2           400
+
+
+3.31/ Mostrar la media de las cantidades vendidas por cada código de pieza junto con su nombre.
+
+select v.codpie,nompie,AVG(cantidad)
+from ventas v,pieza
+where (v.codpie=pieza.codpie)
+group by (v.codpie,nompie);
+
+COD NOMPIE     AVG(CANTIDAD)
+--- ---------- -------------
+P3  Arandela           332,5
+P1  Tuerca         456,66667
+P2  Tornillo            1130
+P4  Clavo          183,33333
+P5  Alcayata       111,66667
+
+3.32/ Encontrar la cantidad media de ventas de la pieza ’P1’ realizadas por cada proveedor.
+
+select codpro,AVG(cantidad)
+from ventas 
+where(codpie='P1')
+group by(codpro);
+
+COD AVG(CANTIDAD)
+--- -------------
+S1            250
+S3             90
+S4           1500
+S5            400
+COD AVG(CANTIDAD)
+--- -------------
+P1      456,66667
+
+
+
+
+cantidad media vendidad para la pieza P1
+
+select codpie,AVG(cantidad)
+from ventas 
+where codpie='P1'
+group by(codpie);
+
+COD AVG(CANTIDAD)
+--- -------------
+P1      456,66667
+
+
+---------------------------------------------------------------------------------
+
+HAVING
+
+3.21/ Hallar la cantidad media de ventas realizadas por cada proveedor, indicando solamente los
+códigos de proveedores que han hecho más de 3 ventas.
+
+Select codpro, AVG(cantidad)
+from ventas
+group by (codpro)
+having COUNT(*) >3;
+
+COD AVG(CANTIDAD)
+--- -------------
+S1            275
+S4         828,75
+
+
+3.35/ Mostrar los nombres de proveedores tales que el total de sus ventas superen la cantidad de
+1000 unidades.
+
+select nompro,SUM(cantidad)
+from proveedor,ventas
+where( proveedor.codpro=ventas.codpro)
+group by (nompro)
+having SUM(cantidad)>1000;
+
+
+NOMPRO                         SUM(CANTIDAD)
+------------------------------ -------------
+Manuel Vidal                            4815
+Jose Fernandez                          2475
+Pedro Sanchez                           3315
+
+
+EJERCICIOS:
+
+1º/ Obten por cada equipo cuantos encuentros ha ganado.
+2º/Obtener por cada jugador cuantos encuentros ha perdido.
+3º/ Obtener por cada jugador el numero total de faltas realizadas.
+4º/ Obtener los codigos de equipo en los que a todos sus jugadores les han puesto faltas.
+5º/ Contabilizar el nº de faltas total por codigo de equipo en los que todos sus jugadores le han puesto faltas.
+
+
+1º/
+
+select codeq,count(*) 
+from equipos,encuentros
+where((eq1=codeq and res1>res2) or (eq2=codeq and res1<res2))
+group by codeq;
+
+2º/
+select nombrejug,count(*)
+from equipos eq,encuentros e,jugador j
+where(((eq.codeq=eq1 and res1<res2) and (eq.codeq=j.codeq)) or ((eq.codeq=eq2 and res1>res2) and (eq.codeq=j.codeq)))
+group by nombrejug;
+
+4º/
+select codeq
+from equipos eq,jugador j,faltas f
+where(eq.codeq=j.codeq and 

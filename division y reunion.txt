@@ -1,0 +1,85 @@
+ciudad y codigo pieza suministrada  cualquier proyecto por un proveedor cuya ciudad es la misma que la de proyecto.
+
+select pieza.ciudad,pieza.codpie from proveedor,proyecto,ventas,pieza where proveedor.ciudad=proyecto.ciudad and proveedor.codpro=ventas.codpro and proyecto.copj=ventas.codpj ç
+and pieza.codpie=ventas.codpie;
+
+
+
+----------------------------------------------------------------------------------
+
+select codpro from proveedor where NOT EXITS
+(select * from ventas where
+ventas.codpro=proveedor.codpro and ventas.codpie='P1');
+
+
+select codpro from proveedor
+where exist   (select * from ventas
+where ventas.codpro=proveedor.codpro and ventas.codpie='P1');
+
+select codpro from proveedor 
+where status=(select status from proveedor where codpro='S3');
+
+select codpie from pieza
+where peso > ANY (select peso from pieza where nompie like 'tornillo%');
+
+
+select codpie from pieza
+where peso > ALL (select peso from pieza where nompie like 'tornillo%');
+
+select codpie from pieza
+where peso <=ALL (select peso from pieza);
+
+select codpie from pieza
+where peso >=ALL (select peso from pieza);
+
+
+----------------------DIVISION!!!-------------------------------
+
+select codpro from proveedor
+where NOT EXISTS
+(select codpie from pieza
+minus
+select codpie from ventas
+where ventas.codpro=proveedor.codpro);
+
+
+select distinct codpro from ventas
+where NOT EXISTS
+(select codpie from pieza
+minus
+select codpie from ventas v
+where ventas.codpro=v.codpro);
+
+Encontrar los códigos de las piezas suministradas a todos los proyectos localizados en Lon-
+dres.
+
+Si hay condicion, simepre se pone en el todos.
+
+select codpie from pieza 
+where not exists
+(select codpj from proyecto
+where ciudad='Londres'
+minus 
+select codpj from ventas
+where pieza.codpie=ventas.codpie );
+
+Ejercicio 3.25 Encontrar aquellos proveedores que envían piezas procedentes de todas las ciudades donde
+hay un proyecto.
+
+select codpro from proveedor
+where not exists
+(select distinct ciudad from proyecto
+minus 
+select distinct ciudad from ventas,pieza
+where ventas.codpro=proveedor.codpro
+and pieza.codpie=ventas.codpie);
+
+Encontrar los codjugadores que hayan cometido faltas en todos los encuentros.
+
+select codjug from jugador
+where not exists
+(select eq1,eq2 from encuentros
+where jugador.codeq=eq1 or jugador.codeq=eq2
+minus 
+select eq1,eq2 from faltas
+where faltas.codjug=jugador.codjug);

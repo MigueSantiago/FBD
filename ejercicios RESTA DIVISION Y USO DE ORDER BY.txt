@@ -1,0 +1,71 @@
+Uso de la división
+
+1º/ Encontrar los proveedores que suministran todas las piezas que pesan más de 300.
+
+select distinct codpro from ventas 
+where not exists(select codpie from pieza where peso > 300
+minus 
+select codpie from ventas v 
+where v.codpro=ventas.codpro);
+
+-------------------------------------------------------------------------------------------
+Uso de la Resta
+
+2º/ Encontrar los proveedores que suministran solamente las piezas que pesan másm de 300.
+
+select codpro from proveedor
+minus 
+select codpro  from pieza,ventas where peso <= 300 and pieza.codpie=ventas.codpie;
+
+-------------------------------------------------------------------------------------------
+
+Para que ordene la manera de mostrar la tabla por nombre se pone ORDER BY.
+ejemplo:
+
+select * from pieza order by nompie;
+
+antes:
+
+COD NOMPIE     COLOR           PESO CIUDAD
+--- ---------- ---------- --------- --------
+P1  Tuerca     Gris             2,5 Madrid
+P2  Tornillo   Rojo            1,25 Paris
+P3  Arandela   Blanco             3 Londres
+P5  Alcayata   Blanco            10 Roma
+P4  Clavo      Gris             5,5 Lisboa
+
+
+
+
+Despues:
+
+COD NOMPIE     COLOR           PESO CIUDAD
+--- ---------- ---------- --------- ---------
+P5  Alcayata   Blanco            10 Roma
+P3  Arandela   Blanco             3 Londres
+P4  Clavo      Gris             5,5 Lisboa
+P2  Tornillo   Rojo            1,25 Paris
+P1  Tuerca     Gris             2,5 Madrid
+
+
+Ejemplo:
+
+select * from pieza order by color asc,nompie desc;
+
+COD NOMPIE     COLOR           PESO CIUDAD
+--- ---------- ---------- --------- --------
+P2  Tornillo   Rojo            1,25 Paris
+P4  Clavo      Gris             5,5 Lisboa
+P1  Tuerca     Gris             2,5 Madrid
+P5  Alcayata   Blanco            10 Roma
+P3  Arandela   Blanco             3 Londres
+
+select * from pieza order by color asc,nompie desc;
+
+COD NOMPIE     COLOR           PESO CIUDAD
+--- ---------- ---------- --------- ---------
+P3  Arandela   Blanco             3 Londres
+P5  Alcayata   Blanco            10 Roma
+P1  Tuerca     Gris             2,5 Madrid
+P4  Clavo      Gris             5,5 Lisboa
+P2  Tornillo   Rojo            1,25 Paris

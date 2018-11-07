@@ -1,0 +1,88 @@
+crea tabla de ventas paris
+
+Ejemplo 4.1
+
+ create view VentasParis as
+ select codpro,codpie,codpj,cantidad
+ from ventas where (codpro,codpie,codpj) in
+ (select codpro,codpie,codpj from proveedor,pieza,proyecto
+ where proveedor.ciudad='Paris' and pieza.ciudad='Paris' and proyecto.ciudad='Paris');
+
+
+
+select * from all_users where owner='x...'
+
+select * from VentasParis where
+	codpro='J1';
+
+eliminar lista: 
+
+Drop View VentasParis;
+
+elimina toda la lista.
+
+para borrar datos se usa: delete from [nombre tabla]
+
+
+
+create view PiezasLondres as
+select codpie,nompie,color,peso
+from pieza where pieza.ciudad='Londres';
+
+
+insert into PiezasLondres values('p9','PiezaNueva','rojo','90');
+
+crear vista con proveedores de londres.
+
+create view ProveedoresLondres as
+(select codpro,nompro,status,ciudad from proveedor
+where ciudad='Londres') with check option;
+
+insert into ProveedoresLondres values('S7','Jose Suarez','3','Granada');
+
+
+create view ProveedoresCiudad as
+select nompro,ciudad from proveedor;
+
+insert into ProveedoresCiudad values('Nacho Fernandez','Sevilla');
+
+
+create view VproPJ as
+select ventas.codpro,proveedor.nompro,ventas.codpj from
+proveedor,ventas,pieza where (proveedor.codpro=ventas.codpro and pieza.codpie=ventas.codpie and pieza.color='Gris');
+
+
+INDICES!!!!!!!!!
+
+
+CREATE INDEX pro_ciu_st 
+ON PROVEEDOR(ciudad,status);
+
+select index_name,index_type from user_indexes where table_name='PROVEEDOR';
+
+
+select PLAN_TABLE_OUTPUT from TABLE(DBMS_XPLAN.DISPLAY());
+
+
+explain plan for select  nompro,nompie from proveedor,pieza,ventas 
+where(proveedor.codpro=ventascodpro and pieza.codpie=ventas.codpie and proveedor.ciudad='Londres');
+
+
+CLUSTER__-----_____--___-
+
+create cluster cluster_codpro (codpro char(3)); 
+
+create table proveedor2(
+codpro char(3) constraint codpro_n_nulo not null
+constraint codpro_clve_primaria primary key,
+nompro varchar2(30) constraint nompro_n_nulo not null,
+status number constraint stats_entre_1_y_10 check(status>=1 and status<=10),
+ciudad varchar2(15))
+cluster cluster_codpro(codpro);
+
+
+INSERT INTO proveedor2 select * from proveedor;
+insert into ventas2 select * from ventas;
+
+select * from user_objects
+where to_char(created,'DD/MM/YYYY')='22/05/2013';

@@ -1,0 +1,4 @@
+create table VIAJE(
+CODVIAJE char(4) constraint CODVIAJE_no_nulo not null constraint CODVIAJE_CLAVE_PRIMARIA primary key,
+DNI REFERENCES CONDUCTOR(DNI) ,
+MATRICULA REFERENCES VEHICULO(MATRICULA));

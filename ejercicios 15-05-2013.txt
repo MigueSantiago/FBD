@@ -1,0 +1,21 @@
+/- Obtener los codigos de equipos en lo que a todos sus jugadores le han puesto faltas.
+
+
+select distinct codeq from jugador
+minus
+select distinct codeq from jugador 
+where codjug not in(select codjug from faltas
+where faltas.eq1=codeq or faltas.eq2=codeq);
+
+
+
+/- Contabilizar el numero de faltas total por codigo de equipo en los que a todos sus jugadores les han puesto faltas.
+
+select distinct codeq,sum(faltas) from faltas,equipos
+where eq1=codeq or eq2=codeq and codeq in(
+select distinct codeq from jugador
+minus
+select distinct codeq from jugador 
+where codjug not in(select codjug from faltas
+where faltas.eq1=codeq or faltas.eq2=codeq))
+group by(codeq); 

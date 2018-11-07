@@ -1,0 +1,40 @@
+3º/
+
+
+
+UPDATE CONDUCTOR set DIRECCION='Lorca 12'
+where CONDUCTOR.DNI='21462123';
+
+4º/
+
+CREATE INDEX INDEX_NOMBRE on CONDUCTOR(NOMBRE);
+
+SELECT * FROM user_indexes WHERE index_name like 'INDEX_NOMBRE';
+
+5º/
+
+CREATE INDEX INDEX_SALIDA_LLEGADA on RUTA(CIUDAD_SAL,CIUDAD_LLEG);
+
+SELECT * FROM user_indexes WHERE index_name like 'INDEX_SALIDA_LLEGADA';
+
+6º/
+
+1.Encontrar entre que dos ciudades se realiza el viaje más largo
+
+select ciudad_sal,ciudad_lleg,km 
+from RUTA 
+where km=(select MAX(KM) from ruta);
+
+2.Listar los nombres de los conductores que hayan llevado todos los camiones
+
+select nombre from conductor
+where not exists(select matricula from vehiculo
+minus
+select matricula from viaje where
+viaje.dni=conductor.dni);
+
+3.Encontrar que días de la semana se hacen viajes entre Granada y Jaén antes de las 12:00
+
+select dia_sem from prog_viaje where codruta in
+(select codruta from ruta where
+ruta.codruta=prog_viaje.codruta and ruta.ciudad_sal='Granada' and ruta.ciudad_lleg='Jaen' and prog_viaje.hora_sal<'12:00');

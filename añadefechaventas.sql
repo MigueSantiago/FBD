@@ -1,0 +1,1 @@
+ALTER TABLE ventas ADD(fecha date default SYSDATE);
